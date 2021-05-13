@@ -76,6 +76,13 @@ public class MultiImageSelector {
 
         }
 
+
+        public void start(@NonNull Context context, @NonNull androidx.fragment.app.Fragment fragment, int requestCode) {
+                if (checkforpermissions(fragment.getActivity())){
+                        fragment.startActivityForResult(getIntent(context), requestCode);
+                }
+
+        }
         public Intent getIntent(@NonNull Context context) {
                 GalleryIntent.setClass(context, GalleryActivity.class);
                 GalleryIntent.putExtras(OptionsBundle);

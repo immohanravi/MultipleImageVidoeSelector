@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,6 +24,7 @@ import com.immohanravi.multiimageselector.adapters.BucketsAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -36,6 +38,7 @@ public class OneFragment extends Fragment {
     public static List<String> imagesList= new ArrayList<>();
     public static List<Boolean> selected=new ArrayList<>();
 
+    private static final String TAG = "OneFragment";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +120,9 @@ public class OneFragment extends Fragment {
         Cursor cursor = getContext().getContentResolver()
                 .query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection2,
                          MediaStore.Images.Media.BUCKET_DISPLAY_NAME+" =?",new String[]{bucket}, MediaStore.Images.Media.DATE_ADDED);
+        for(String name : cursor.getColumnNames()){
+            Log.d(TAG, "getPictures: "+name);
+        }
         ArrayList<String> imagesTEMP = new ArrayList<>(cursor.getCount());
         HashSet<String> albumSet = new HashSet<>();
         File file;
@@ -126,6 +132,7 @@ public class OneFragment extends Fragment {
                     return;
                 }
                 String path = cursor.getString(cursor.getColumnIndex(projection2[1]));
+                //Log.d(TAG, "getPictures: "+path);
                 file = new File(path);
                 if (file.exists() && !albumSet.contains(path)) {
                     imagesTEMP.add(path);
